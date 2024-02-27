@@ -20,6 +20,8 @@ body {
   position: absolute;
   top: 35vh;
   right: 35%;
+  z-index: 10;
+
 }
 
 #top-line {
@@ -31,4 +33,24 @@ body {
   align-items: start;
   height: 100px;
   width: 100%;
+}
+
+#text-zone {
+  position: absolute;
+  height: 60vh;
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 20vh;
+  left: 20vh;
+  background-color: white;
+  border: 10px solid black;
+  border-radius: 40px;
+  
+}
+
+p {
+  font-size: 50px;
+  font-weight: bold;
 }

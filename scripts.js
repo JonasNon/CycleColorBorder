@@ -36,6 +36,14 @@ let redMaxed = true
 let greenMaxed = false
 let blueMaxed = false
 
+let redStartOld = false
+let greenStartOld = true
+let blueStartOld = false
+
+let redMaxedOld = true
+let greenMaxedOld = false
+let blueMaxedOld = false
+
 
 const startPress = () => {
   document.getElementById("start").style.visibility = "hidden"
@@ -43,15 +51,10 @@ const startPress = () => {
     isOn = false
     clearInterval(timer)
     console.log("here")
-
     return
+    
   } else {
     let timer = window.setInterval(everyFrame, 1)
-    // let timer2 = window.setInterval(everyFrame, 10)
-    // let timer3 = window.setInterval(everyFrame, 10)
-    // let timer4 = window.setInterval(everyFrame, 10)
-    // let timer5 = window.setInterval(everyFrame, 10)
-
     isOn = true
     divCreator()
     return
@@ -89,11 +92,15 @@ const divCreator = () => {
 //do some base funstions in startpress then have it go to next div every iteration
 //window.setInterval(everyFrame, 200)
 const everyFrame = () => {
-  for (let i = 0; i < 5; i++) {
+  console.log("redStart: ", redStart,"redMaxed: ",redMaxed,"greenStart: ",greenStart,"greenMaxed: ",greenMaxed,"blueStart: ",blueStart,"blueMaxed: ",blueMaxed)
+
+  // for (let i = 0; i < 5; i++) {
 
   
     for (let i = 0; i < screen.width; i++) {
+      
       let currentDiv = divList[i]
+      
       if (oldDiv == null) {
         oldRGB = currentDiv.style.backgroundColor
       } else {
@@ -114,6 +121,8 @@ const everyFrame = () => {
         } else if (redMaxed == true) {
           if (greenMaxed == true) {
             oldR -= 1
+          } else { //maybe
+            oldR += 1
           }
           
           
@@ -121,16 +130,21 @@ const everyFrame = () => {
     
         if (oldR > 255) {
           redMaxed = true
-          if (blueMaxed != true) {
+          console.log('red max')
+
+          if (blueMaxed == false) {
             greenStart = true
           } else {
+            blueStart = true
+
+            // redStart = false
             //drain blue
           }
 
           oldR -= 1
         } else if (oldR < 0) {
           redMaxed = false
-          oldR = 0
+          // oldR = 0
           redStart = false
           blueStart = true
         }
@@ -151,6 +165,7 @@ const everyFrame = () => {
 
           blueStart = true
           redStart = true
+          console.log('green max')
 
         } else if (oldG < 0) {
           greenMaxed = false
@@ -159,64 +174,119 @@ const everyFrame = () => {
           redStart = true
         }
       }
-
+      
       if (blueStart == true) {
-        if (blueMaxed == false && greenMaxed == true) {
+        if (blueMaxed == false && greenMaxed == true && redMaxed == false) {
           oldB += 1
         } else if (blueMaxed == true && redMaxed == true) {
           oldB -= 1
-          
         }
+        //i think this code above here might be the problem??? maybe???
+        //the duration of blue is longer for some reason???
+        //if olb > 0, slow down? but only after bluemaxed?
     
         if (oldB > 255) {
           blueMaxed = true
-          greenStart = true
-
+          if (redMaxed == false) {
+            greenStart = true
+          }
+          
+          console.log('blue max: ', oldB, redMaxed)
         } else if (oldB < 0) {
           blueMaxed = false
           oldB = 0
           blueStart = false
           if (redMaxed == true) {
             greenStart = true
-            oldDiv = null
+            // oldDiv = null
+            console.log("end")
+
+            // oldR = 0
           }
         }
       }
 
 
 
-      // if (oldR > 255) {
-      //   redMaxed = true
-      //   // oldR -= 1
-      // } else if (oldR <= 0) {
-      //   console.log('reset')
-      //   redMaxed = false
-      //   oldR = 0
-      // }
 
-      
-
-
-
-
-      let newR = Math.abs(oldR - Math.floor(i/screen.width))
-      let newG = Math.abs(oldG - Math.floor(i/screen.width))
-      let newB = Math.abs(oldB - Math.floor(i/screen.width))
+      // let newR = Math.abs(oldR - Math.floor(i/screen.width))
+      // let newG = Math.abs(oldG - Math.floor(i/screen.width))
+      // let newB = Math.abs(oldB - Math.floor(i/screen.width))
 
       // console.log(newR)
+
       //                                 "rgb(0, 0, 0)"
       currentDiv.style.backgroundColor = 'rgb(' + oldR + ', ' + oldG + ', ' + oldB + ')';
-      
-      // console.log(oldG)
-
-      // currentColor += 1
-      // if (currentColor == avaliableColors.length) {
-      //   currentColor = 0
-      // }
-
-
       oldDiv = divList[i]
+      
+      redLevel = oldR
+      greenLevel = oldG
+      blueLevel = oldB
+
+
     }
-  }
+    // console.log(redStart,redMaxed,greenStart,greenMaxed,blueStart,blueMaxed)
+    oldDiv = divList[1]
+    
+
+
+
+
+    //it could probably work without this garbage... if only i knew how
+    // if (redMaxed) {
+    //   redStart = false
+    //   greenStart = true
+    //   blueStart = false
+  
+    //   redMaxed = true
+    //   greenMaxed = false
+    //   blueMaxed = false
+    // } 
+    // if (greenMaxed) {
+    //   redStart = true
+    //   greenStart = true
+    //   blueStart = true
+  
+    //   redMaxed = true
+    //   greenMaxed = true
+    //   blueMaxed = false
+    // } 
+    // if (greenMaxed && blueMaxed) {
+    //   redStart = false
+    //   greenStart = true
+    //   blueStart = true
+  
+    //   redMaxed = false
+    //   greenMaxed = true
+    //   blueMaxed = true
+    // } 
+    // if (blueMaxed && greenMaxed != true) {
+    //   redStart = false
+    //   greenStart = true
+    //   blueStart = true
+  
+    //   redMaxed = false
+    //   greenMaxed = true
+    //   blueMaxed = true
+
+    // }
+    // if (blueMaxed == true && redMaxed == true) {
+    //   redStart = true
+    //   greenStart = false
+    //   blueStart = true
+  
+    //   redMaxed = true
+    //   greenMaxed = false
+    //   blueMaxed = true
+
+    // }
+
+    
+    if (oldB == 255 && oldR >= 255) {
+      console.log('hababhabbhbahbahbahhb', oldR, oldB)
+    }
+
+
+  // }
   // currentColor += 1
 }
